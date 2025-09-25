@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Filme</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link id="themeStylesheet" rel="stylesheet" href="css/light.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="js/theme.js" defer></script>
+  <script src="js/api.js" defer></script>
+</head>
+<body>
+  <nav class="navbar p-3 d-flex justify-content-between">
+    <h1>✏️ Editar Filme</h1>
+    <button onclick="toggleTheme()" class="btn btn-secondary">Alternar Tema</button>
+  </nav>
+
+  <div class="container mt-4">
+    <form id="formEditar">
+      <input type="hidden" id="id">
+      <div class="mb-3">
+        <label class="form-label">Título</label>
+        <input type="text" id="titulo" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Gênero</label>
+        <input type="text" id="genero" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Sinopse</label>
+        <textarea id="sinopse" class="form-control"></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Ano de Lançamento</label>
+        <input type="number" id="anoLancamento" class="form-control">
+      </div>
+      <button type="submit" class="btn btn-primary">Atualizar</button>
+      <a href="index.html" class="btn btn-secondary">Cancelar</a>
+    </form>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+
+      buscarFilme(id, filme => {
+        $("#id").val(filme.id);
+        $("#titulo").val(filme.titulo);
+        $("#genero").val(filme.genero);
+        $("#sinopse").val(filme.sinopse);
+        $("#anoLancamento").val(filme.anoLancamento);
+      });
+
+      $("#formEditar").submit(function(e) {
+        e.preventDefault();
+        const filmeAtualizado = {
+          titulo: $("#titulo").val(),
+          genero: $("#genero").val(),
+          sinopse: $("#sinopse").val(),
+          anoLancamento: $("#anoLancamento").val()
+        };
+        atualizarFilme(id, filmeAtualizado, () => window.location.href = "index.html");
+      });
+    });
+  </script>
+</body>
+</html>

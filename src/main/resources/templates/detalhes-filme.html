@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Filme</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px 40px;
+            margin-top: 50px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            width: 500px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        h2, h3 {
+            color: #444;
+            margin-top: 25px;
+        }
+
+        p {
+            margin: 8px 0;
+            color: #555;
+        }
+
+        b {
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        li {
+            background-color: #f7f7f7;
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        form p {
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            color: #555;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 th:text="${filme.titulo}">Título</h1>
+
+        <p><b>Sinopse:</b> <span th:text="${filme.sinopse}"></span></p>
+        <p><b>Gênero:</b> <span th:text="${filme.genero}"></span></p>
+        <p><b>Ano:</b> <span th:text="${filme.anoLancamento}"></span></p>
+
+        <h2>Análises</h2>
+        <ul>
+            <li th:each="a : ${filme.analises}">
+                Nota: <span th:text="${a.nota}">0</span> — <span th:text="${a.comentario}">Comentário</span>
+            </li>
+        </ul>
+
+        <h3>Adicionar Análise</h3>
+        <form th:action="@{'/filmes/' + ${filme.id} + '/analises'}" th:object="${analise}" method="post">
+            <p>
+                <label for="nota">Nota (1–5):</label>
+                <input id="nota" type="number" min="1" max="5" th:field="*{nota}" required>
+            </p>
+            <p>
+                <label for="comentario">Comentário:</label>
+                <input id="comentario" th:field="*{comentario}" required>
+            </p>
+            <button type="submit">Salvar análise</button>
+        </form>
+
+        <a href="/filmes">Voltar</a>
+    </div>
+</body>
+</html>
+

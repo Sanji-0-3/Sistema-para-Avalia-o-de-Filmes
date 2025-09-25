@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Análises do Filme</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link id="themeStylesheet" rel="stylesheet" href="css/light.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="js/theme.js" defer></script>
+  <script src="js/api.js" defer></script>
+</head>
+<body>
+  <nav class="navbar p-3 d-flex justify-content-between">
+    <h1>📋 Análises</h1>
+    <button onclick="toggleTheme()" class="btn btn-secondary">Alternar Tema</button>
+  </nav>
+
+  <div class="container mt-4">
+    <div id="dadosFilme" class="mb-4"></div>
+
+    <h2>➕ Adicionar Análise</h2>
+    <form id="formAnalise" class="mb-4">
+      <div class="mb-3">
+        <label class="form-label">Autor</label>
+        <input type="text" id="autor" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Comentário</label>
+        <textarea id="comentario" class="form-control" required></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Nota</label>
+        <input type="number" id="nota" min="0" max="10" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-success">Salvar</button>
+      <a href="index.html" class="btn btn-secondary">Voltar</a>
+    </form>
+
+    <ul class="list-group" id="listaAnalises"></ul>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      const params = new URLSearchParams(window.location.search);
+      const idFilme = params.get("id");
+
+      function carregarAnalises() {
+        buscarFilme(idFilme, filme => {
+          $("#dadosFilme").html(`<h1>${filme.titulo} (${filme.anoLancamento})</h1><p>${filme.sinopse}</p>`);
+          listarAnalises(idFilme, analises => {
+            $("#listaAnalises").empty();
+            analises.forEach(a => {
+              $("#listaAnalises").append(`
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <div><b>${a.autor}</b> (${a.nota}/10): ${a.comentario}</div>
+                  <button class="btn btn-sm btn-danger" onclick="deletarAnalise(${idFilme}, ${a.id}, carregarAnalises)">Excluir</button>
+                </li>
+              `);
+            });
+          });
+        });
+      }
+
+      carregarAnalises();
+
+      $("#formAnalise").submit(function(e) {
+        e.preventDefault();
+        const analise = {
+          autor: $("#autor").val(),
+          comentario: $("#comentario").val(),
+          nota: $("#nota").val()
+        };
+        adicionarAnalise(idFilme, analise, () => {
+          $("#formAnalise")[0].reset();
+          carregarAnalises();
+        });
+      });
+    });
+  </script>
+</body>
+</html>
