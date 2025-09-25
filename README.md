@@ -56,3 +56,7 @@ O sistema oferece os seguintes endpoints para gerenciamento de filmes e análise
     * `GET /api/filmes/{id}/analises`: Lista as análises de um filme específico.
     * `POST /api/filmes/{id}/analises`: Adiciona uma nova análise a um filme.
     * `DELETE /api/filmes/{id}/analises/{analiseId}`: Deleta uma análise de um filme.
+
+---
+
+Para que você possa rodar o projeto, é essencial que a conexão com o banco de dados MySQL esteja configurada corretamente. Você já criou o banco de dados? Se não, posso orientá-lo sobre como fazer isso.
